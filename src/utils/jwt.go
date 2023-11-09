@@ -7,6 +7,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GenerateUserJWTToken(user models.User, refresh bool) string {
@@ -47,7 +48,25 @@ func ValidateUserJWTTOken(token string) *models.User {
 		panic(fiber.NewError(fiber.StatusUnauthorized, "Invalid token"))
 	}
 
-	user := claims["data"].(models.User)
+	claimsData, ok := claims["data"].(map[string]interface{})
+	if !ok {
+		panic(fiber.NewError(fiber.StatusUnauthorized, "Invalid data format in claims"))
+	}
+
+	objID, err := primitive.ObjectIDFromHex(claimsData["_id"].(string))
+	role, ok := claimsData["role"].(string)
+	verificationCode, ok := claimsData["verification_code"].(string)
+
+	user := models.User{
+		Email:            claimsData["email"].(string),
+		Role:             models.UserRole(role),
+		Name:             claimsData["name"].(string),
+		ID:               objID,
+		Password:         claimsData["password"].(string),
+		CreatedAt:        claimsData["created_at"].(string),
+		VerificationCode: &verificationCode,
+		Verified:         claimsData["verified"].(bool),
+	}
 
 	return &user
 }
