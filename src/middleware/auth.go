@@ -22,9 +22,20 @@ func Protect(ctx *fiber.Ctx) error {
 
 // TODO: Remove once the project is complete
 func AdminProtect(ctx *fiber.Ctx) error {
-	user := ctx.Locals("user").(*models.User)
+	token := ctx.Get(fiber.HeaderAuthorization)
+
+	if "" == token {
+		panic(fiber.NewError(fiber.StatusUnauthorized, "Missing bearer token"))
+	}
+
+	user := utils.ValidateUserJWTTOken(token[len("Bearer "):])
+	ctx.Locals("user", user)
+
+	user = ctx.Locals("user").(*models.User)
+
 	if user.Role != models.Admin {
 		panic(fiber.NewError(fiber.StatusUnauthorized, "You are not authorized to access this resource"))
 	}
+
 	return ctx.Next()
 }
