@@ -33,5 +33,5 @@ func Use(databaseName string) *mongo.Database {
 }
 
 func UseDefault() *mongo.Database {
-	return client.Database("ch")
+	return client.Database("check-list")
 }
