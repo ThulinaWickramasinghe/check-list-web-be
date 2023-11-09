@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
 	"github.com/sethvargo/go-password/password"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func createUser(c *fiber.Ctx, payload dto.CreateUserReq) *dto.CreateUserRes {
@@ -22,10 +23,26 @@ func createUser(c *fiber.Ctx, payload dto.CreateUserReq) *dto.CreateUserRes {
 		Name:             payload.Name,
 		VerificationCode: &verificationCode,
 		Password:         utils.HashStr(generatedPassword),
+		Role:             models.UserRole(payload.Role),
 	}.WithDefaults())
 
 	return &dto.CreateUserRes{
 		ID:       insertedId,
 		Password: generatedPassword,
+	}
+}
+
+func getUser(c *fiber.Ctx, id primitive.ObjectID) *dto.GetUserRes {
+	log.Info("Fetching a user with ID - " + id.String())
+
+	user := repository.FindByID(id)
+
+	return &dto.GetUserRes{
+		ID:        user.ID,
+		Name:      user.Name,
+		Email:     user.Email,
+		Role:      string(user.Role),
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
 	}
 }

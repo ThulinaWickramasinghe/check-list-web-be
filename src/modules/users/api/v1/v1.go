@@ -12,6 +12,7 @@ func New() *fiber.App {
 	v1.SyncIndexes()
 	v1 := fiber.New()
 	v1.Post("/", m.Validate[dto.CreateUserReq](m.Body), Create)
+	v1.Get("/:id", GetUser)
 
 	return v1
 }
