@@ -35,3 +35,21 @@ func GetUser(c *fiber.Ctx) error {
 		Data:    res,
 	})
 }
+
+//TODO: to be implemented later and then removed
+// func GetUsers(c *fiber.Ctx) error {
+// 	id := c.Params("id")
+
+// 	objectID, err := primitive.ObjectIDFromHex(id)
+
+// 	if err != nil {
+// 		return c.Status(400).JSON("Please ensure that :id is a hex string")
+// 	}
+
+// 	res := getUser(c, objectID)
+
+// 	return c.Status(200).JSON(global.Response[dto.GetUserRes]{
+// 		Message: "User retrieved",
+// 		Data:    res,
+// 	})
+// }

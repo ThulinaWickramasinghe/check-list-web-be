@@ -46,3 +46,20 @@ func getUser(c *fiber.Ctx, id primitive.ObjectID) *dto.GetUserRes {
 		UpdatedAt: user.UpdatedAt,
 	}
 }
+
+//TODO: to be implemented later and then removed
+// func getUsers(c *fiber.Ctx, id primitive.ObjectID) *dto.GetUserRes {
+// 	log.Info("Fetching all users")
+
+// 	users := repository.FindAll()
+// 	usersRes := []dto.GetUserRes
+
+// 	return &dto.GetUserRes{
+// 		ID:        user.ID,
+// 		Name:      user.Name,
+// 		Email:     user.Email,
+// 		Role:      string(user.Role),
+// 		CreatedAt: user.CreatedAt,
+// 		UpdatedAt: user.UpdatedAt,
+// 	}
+// }

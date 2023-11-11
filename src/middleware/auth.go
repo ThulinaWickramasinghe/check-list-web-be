@@ -22,6 +22,7 @@ func Protect(ctx *fiber.Ctx) error {
 
 // TODO: Remove once the project is complete
 func AdminProtect(ctx *fiber.Ctx) error {
+	//TODO: extract as a separate function
 	token := ctx.Get(fiber.HeaderAuthorization)
 
 	if "" == token {
@@ -30,6 +31,8 @@ func AdminProtect(ctx *fiber.Ctx) error {
 
 	user := utils.ValidateUserJWTTOken(token[len("Bearer "):])
 	ctx.Locals("user", user)
+
+	//TODO: extract as a separate func downto here
 
 	user = ctx.Locals("user").(*models.User)
 
