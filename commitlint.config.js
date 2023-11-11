@@ -18,6 +18,7 @@ module.exports = {
                 "Test",
                 "Docs",
                 "WIP",
+                "Style",
             ],
         ],
         "type-case": [0],
