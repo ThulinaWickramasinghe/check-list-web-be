@@ -11,10 +11,10 @@ import (
 )
 
 func GenerateUserJWTToken(user models.User, refresh bool) string {
-	expiry := time.Hour * 1
+	expiry := time.Hour * 24
 
 	if refresh {
-		expiry = time.Hour * 24
+		expiry = time.Hour * 48
 	}
 
 	claims := jwt.MapClaims{
