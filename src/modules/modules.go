@@ -3,6 +3,7 @@ package modules
 import (
 	"check-list-be/src/modules/auth"
 	"check-list-be/src/modules/system"
+	"check-list-be/src/modules/tasks"
 	"check-list-be/src/modules/users"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,6 +15,7 @@ func New() *fiber.App {
 	modules.Mount("/users", users.New())
 	modules.Mount("/auth", auth.New())
 	modules.Mount("/system", system.New())
+	modules.Mount("/tasks", tasks.New())
 
 	return modules
 }
