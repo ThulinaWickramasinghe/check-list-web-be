@@ -31,7 +31,7 @@ type ToggleStatusRes struct {
 }
 
 type UpdateTaskDescReq struct {
-	Description string             `json:"description" bson:"description,omitempty"`
+	Description string `json:"description" bson:"description,omitempty"`
 }
 
 type UpdateTaskDescRes struct {
