@@ -91,6 +91,16 @@ func (r Repository[T]) Update(id primitive.ObjectID, payload T) {
 	}
 }
 
+func (r Repository[T]) UpdateField(id primitive.ObjectID, fieldName string, fieldValue interface{}) {
+	update := bson.M{"$set": bson.M{fieldName: fieldValue}}
+
+	_, err := database.UseDefault().Collection(r.collection).UpdateOne(context.Background(), primitive.M{"_id": id}, update)
+
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (r Repository[T]) Delete(id primitive.ObjectID) {
 	_, err := database.UseDefault().Collection(r.collection).DeleteOne(context.Background(), primitive.M{"_id": id})
 

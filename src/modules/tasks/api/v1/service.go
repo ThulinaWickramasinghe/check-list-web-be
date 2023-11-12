@@ -90,3 +90,30 @@ func deleteTask(c *fiber.Ctx, id primitive.ObjectID) {
 
 	return
 }
+
+func toggleSTasktatus(c *fiber.Ctx, id primitive.ObjectID) *dto.ToggleStatusRes {
+	log.Info("Changing status of task with ID - " + id.String())
+
+	user := c.Locals("user").(*u.User)
+
+	task := repository.FindByID(id)
+
+	if task.UserID != user.ID {
+		panic(fiber.NewError(fiber.StatusNotFound, "No tasks match the given ID"))
+	}
+
+	var newStatus t.TaskStatus
+
+	if task.Status == t.TaskStatus("todo") {
+		newStatus = t.TaskStatus("done")
+	} else {
+		newStatus = t.TaskStatus("todo")
+	}
+
+	repository.UpdateField(id, "status", newStatus)
+
+	return &dto.ToggleStatusRes{
+		ID:     task.ID,
+		Status: newStatus,
+	}
+}
