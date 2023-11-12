@@ -15,7 +15,8 @@ func New() *fiber.App {
 	v1.Post("/", m.Validate[dto.CreateTaskReq](m.Body), Create)
 	v1.Get("/", GetTasks)
 	v1.Get("/:id", GetTask)
-	v1.Patch("/:id", ToggleTaskStatus)
+	v1.Patch("/:id/status", ToggleTaskStatus)
+	v1.Patch("/:id/description", m.Validate[dto.UpdateTaskDescReq](m.Body), UpdateTaskDescription)
 	v1.Delete("/:id", DeleteTask)
 
 	return v1

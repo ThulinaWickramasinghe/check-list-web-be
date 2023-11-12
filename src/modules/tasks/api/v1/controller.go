@@ -58,7 +58,26 @@ func ToggleTaskStatus(c *fiber.Ctx) error {
 	res := toggleTaskStatus(c, objectID)
 
 	return c.Status(fiber.StatusOK).JSON(global.Response[dto.ToggleStatusRes]{
-		Message: "Task retrieved",
+		Message: "Task status changed",
+		Data:    res,
+	})
+}
+
+func UpdateTaskDescription(c *fiber.Ctx) error {
+	id := c.Params("id")
+	payload := new(dto.UpdateTaskDescReq)
+	c.BodyParser(payload)
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		return c.Status(fiber.ErrBadRequest.Code).JSON("Please ensure that :id is a hex string")
+	}
+
+	res := updateTaskDescription(c, objectID, *payload)
+
+	return c.Status(fiber.StatusOK).JSON(global.Response[dto.UpdateTaskDescRes]{
+		Message: "Task description updated",
 		Data:    res,
 	})
 }

@@ -2,6 +2,7 @@ package dto
 
 import (
 	"check-list-be/src/modules/tasks/api/v1/models"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -24,22 +25,16 @@ type GetTaskRes struct {
 	UpdatedAt   string             `json:"updated_at"`
 }
 
-type ToggleStatusReq struct {
-	ID     primitive.ObjectID `json:"_id"`
-	Status models.TaskStatus  `json:"status" bson:"status,omitempty"`
-}
-
 type ToggleStatusRes struct {
 	ID     primitive.ObjectID `json:"_id"`
 	Status models.TaskStatus  `json:"status" bson:"status,omitempty"`
 }
 
-type UpdateTaskReq struct {
-	ID          primitive.ObjectID `json:"_id"`
+type UpdateTaskDescReq struct {
 	Description string             `json:"description" bson:"description,omitempty"`
 }
 
-type UpdateTaskRes struct {
+type UpdateTaskDescRes struct {
 	ID          primitive.ObjectID `json:"_id"`
 	Description string             `json:"description" bson:"description,omitempty"`
 }

@@ -117,3 +117,22 @@ func toggleTaskStatus(c *fiber.Ctx, id primitive.ObjectID) *dto.ToggleStatusRes 
 		Status: newStatus,
 	}
 }
+
+func updateTaskDescription(c *fiber.Ctx, id primitive.ObjectID, payload dto.UpdateTaskDescReq) *dto.UpdateTaskDescRes {
+	log.Info("Changing description of task with ID - " + id.String())
+
+	user := c.Locals("user").(*u.User)
+
+	task := repository.FindByID(id)
+
+	if task.UserID != user.ID {
+		panic(fiber.NewError(fiber.StatusNotFound, "No tasks match the given ID"))
+	}
+
+	repository.UpdateField(id, "description", payload.Description)
+
+	return &dto.UpdateTaskDescRes{
+		ID:          task.ID,
+		Description: payload.Description,
+	}
+}
