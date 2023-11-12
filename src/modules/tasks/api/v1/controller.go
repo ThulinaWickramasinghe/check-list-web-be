@@ -46,6 +46,23 @@ func GetTasks(c *fiber.Ctx) error {
 	})
 }
 
+func ToggleTaskStatus(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		return c.Status(fiber.ErrBadRequest.Code).JSON("Please ensure that :id is a hex string")
+	}
+
+	res := toggleTaskStatus(c, objectID)
+
+	return c.Status(fiber.StatusOK).JSON(global.Response[dto.ToggleStatusRes]{
+		Message: "Task retrieved",
+		Data:    res,
+	})
+}
+
 func DeleteTask(c *fiber.Ctx) error {
 	id := c.Params("id")
 

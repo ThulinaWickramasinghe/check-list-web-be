@@ -91,7 +91,7 @@ func deleteTask(c *fiber.Ctx, id primitive.ObjectID) {
 	return
 }
 
-func toggleSTasktatus(c *fiber.Ctx, id primitive.ObjectID) *dto.ToggleStatusRes {
+func toggleTaskStatus(c *fiber.Ctx, id primitive.ObjectID) *dto.ToggleStatusRes {
 	log.Info("Changing status of task with ID - " + id.String())
 
 	user := c.Locals("user").(*u.User)
