@@ -11,7 +11,7 @@ import (
 )
 
 func createTask(c *fiber.Ctx, payload dto.CreateTaskReq) *dto.CreateTaskRes {
-	log.Info("Creating a task within system - ")
+	log.Info("Creating a task within system")
 
 	user := c.Locals("user").(*u.User)
 
@@ -33,7 +33,7 @@ func createTask(c *fiber.Ctx, payload dto.CreateTaskReq) *dto.CreateTaskRes {
 }
 
 func getTask(c *fiber.Ctx, id primitive.ObjectID) *dto.GetTaskRes {
-	log.Info("Fetching a task with ID - " + id.String())
+	log.Info("Fetching task with ID - " + id.String())
 
 	user := c.Locals("user").(*u.User)
 
@@ -55,7 +55,7 @@ func getTask(c *fiber.Ctx, id primitive.ObjectID) *dto.GetTaskRes {
 func getTasks(c *fiber.Ctx) *[]dto.GetTaskRes {
 	user := c.Locals("user").(*u.User)
 
-	log.Info("Fetching all tasks of ", user.ID)
+	log.Info("Fetching all tasks of user with ID - ", user.ID)
 
 	filter := map[string]interface{}{"user_id": user.ID}
 	tasks := repository.FindAllWithFilter(filter)
@@ -73,4 +73,20 @@ func getTasks(c *fiber.Ctx) *[]dto.GetTaskRes {
 	}
 
 	return &taskResponses
+}
+
+func deleteTask(c *fiber.Ctx, id primitive.ObjectID) {
+	log.Info("Deleting task with ID - " + id.String())
+
+	user := c.Locals("user").(*u.User)
+
+	task := repository.FindByID(id)
+
+	if task.UserID != user.ID {
+		panic(fiber.NewError(fiber.StatusNotFound, "No tasks match the given ID"))
+	}
+
+	repository.Delete(id)
+
+	return
 }

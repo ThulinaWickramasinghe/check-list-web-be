@@ -12,8 +12,9 @@ func New() *fiber.App {
 	v1.SyncIndexes()
 	v1 := fiber.New()
 	v1.Post("/", m.Validate[dto.CreateTaskReq](m.Body), Create)
-	v1.Get("/:id", GetTask)
 	v1.Get("/", GetTasks)
+	v1.Get("/:id", GetTask)
+	v1.Delete("/:id", DeleteTask)
 
 	return v1
 }
