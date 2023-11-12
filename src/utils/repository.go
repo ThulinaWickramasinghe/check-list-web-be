@@ -6,7 +6,9 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -59,6 +61,25 @@ func (r Repository[T]) FindAll() []T {
 	}
 
 	cursor.All(context.Background(), &models)
+	return models
+}
+
+func (r Repository[T]) FindAllWithFilter(filter map[string]interface{}) []T {
+	var models []T
+
+	// Convert the filter map to BSON
+	filterBson := bson.M(filter)
+
+	cursor, err := database.UseDefault().Collection(r.collection).Find(context.Background(), filterBson)
+	if err != nil {
+		panic(fiber.NewError(fiber.StatusNotFound, "No documents match the given filter"))
+	}
+
+	// Decode the results into the models slice
+	if err := cursor.All(context.Background(), &models); err != nil {
+		panic(err)
+	}
+
 	return models
 }
 

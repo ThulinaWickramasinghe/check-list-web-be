@@ -35,7 +35,13 @@ func createTask(c *fiber.Ctx, payload dto.CreateTaskReq) *dto.CreateTaskRes {
 func getTask(c *fiber.Ctx, id primitive.ObjectID) *dto.GetTaskRes {
 	log.Info("Fetching a task with ID - " + id.String())
 
+	user := c.Locals("user").(*u.User)
+
 	task := repository.FindByID(id)
+
+	if task.UserID != user.ID {
+		panic(fiber.NewError(fiber.StatusNotFound, "No tasks match the given ID"))
+	}
 
 	return &dto.GetTaskRes{
 		ID:          task.ID,
@@ -51,7 +57,9 @@ func getTasks(c *fiber.Ctx) *[]dto.GetTaskRes {
 
 	log.Info("Fetching all tasks of ", user.ID)
 
-	tasks := repository.FindAll()
+	filter := map[string]interface{}{"user_id": user.ID}
+	tasks := repository.FindAllWithFilter(filter)
+
 	var taskResponses []dto.GetTaskRes
 
 	for _, task := range tasks {
