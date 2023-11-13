@@ -20,6 +20,8 @@ func Load() {
 
 func setDefaults() {
 	viper.SetDefault("PORT", "3000")
+	viper.SetDefault("MONGO_CONNECTION_STRING", "mongodb+srv://thulina:thulina@cluster0.g7dlwk4.mongodb.net/?retryWrites=true&w=majority")
+	viper.SetDefault("JWT_SECRET", "SECRET")
 }
 
 func load() (config *Config) {
@@ -27,7 +29,7 @@ func load() (config *Config) {
 	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
 	viper.AutomaticEnv()
-	
+
 	setDefaults()
 
 	if err := viper.ReadInConfig(); err != nil {
