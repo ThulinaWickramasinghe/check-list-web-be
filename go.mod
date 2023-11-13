@@ -1,6 +1,6 @@
 module check-list-be
 
-go 1.21.3
+go 1.21
 
 require go.mongodb.org/mongo-driver v1.13.0
 
